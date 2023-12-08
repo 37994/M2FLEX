@@ -1,6 +1,7 @@
 let canvas = document.getElementById("canvas");
 let g = canvas.getContext("2d");
 
+
 const gamestate_start=0;
 const gamestate_ingame=1;
 const gamestate_gameover=2;
@@ -8,6 +9,9 @@ const gamestate_gameover=2;
 const ingamestate_start=0;
 const ingamestate_roll=1;
 const ingamestate_end=0;
+
+let gameSate = gamestate_start;
+let inGsmeState = ingamestate_start;
 
 let boardPositionSize= 50;
 let pawnPositions = [];
@@ -36,16 +40,15 @@ function clearCanvas()
 function draw()
 {
     clearCanvas();
-    for(let i =0 ; i<boardPositions.length;i++)
-    {
-        let pos = boardPositions[i];
 
-        g.fillStyle  = "#004400";
-        //we gebruiken hier de x en y van het rectangle object
-        // vul bij de ??? ook de h & w in, net als bij de x en y gedaan is!
-        g.fillRect(pos.x,pos.y,pos.w,pos.h);
-        g.fillStyle  = "#FFFFFF";
-        g.fillText((i+1)+"",pos.x,pos.y+20);
+    if(gameSate == gamestate_start)
+    {
+        drawGameStart();
+    }
+    
+    if(gameSate == gamestate_ingame)
+    {
+        drawIngame();
     }
 }
 
@@ -77,5 +80,45 @@ function createBoardPositions()
     }
 } 
 
-createBoardPositions();
+function initGame()
+{
+    createBoardPositions();
+    drawGameStart();
+}
+
+function drawGameStart()
+{
+    const uiWindow = createRect(700, 200, 300, 300);
+
+    for (let i = 0; i < 4; i++) {
+        let button = createRect(uiWindow.x + 60 * i, uiWindow.y + 50, 50, 50);
+        button.playerAmount = i + 1;
+        playerAmountButtons.push(button);
+        
+        g.fillStyle = '#f542bf';
+        g.fillRect(button.x,button.y,button.w,button.h);
+        g.fillStyle = '#FFFFFF';
+        g.fillText((i+1)+"",button.x,button.y+20);
+    }
+}
+
+function drawIngame()
+{
+    for(let i =0; i<boardPositions.length;i++)
+    {
+        let pos = boardPositions[i];
+
+        g.fillStyle = '#004400';
+        g.fillRect(pos.x,pos.y,pos.w,pos.h);
+        g.fillStyle = '#FFFFFF';
+        g.fillText((i+1)+"",pos.x,pos.y+20);
+    }
+}
+
+function drawGameOver()
+{
+
+}
+
+initGame();
 draw();
