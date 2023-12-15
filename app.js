@@ -1,5 +1,6 @@
 let canvas = document.getElementById("canvas");
 let g = canvas.getContext("2d");
+let images ={};
 
 
 const gamestate_start=0;
@@ -99,6 +100,7 @@ function drawGameStart()
         g.fillRect(button.x,button.y,button.w,button.h);
         g.fillStyle = '#FFFFFF';
         g.fillText((i+1)+"",button.x,button.y+20);
+        g.drawImage(images["pawn"+i+".png"],button.x,button.y,button.w,button.h);
     }
 }
 
@@ -120,5 +122,43 @@ function drawGameOver()
 
 }
 
-initGame();
-draw();
+function loadImages()
+{
+    let sources = [
+        "img/dice1.png", "img/dice2.png", "img/dice3.png", "img/dice4.png", "img/dice5.png", "img/dice6.png",
+        "img/pawn0.png", "img/pawn1.png", "img/pawn2.png", "img/pawn3.png", 
+        "img/snakes.png", 
+        "img/trophy.png", 
+        "img/window.png",
+    ];
+    
+    let scope = this;
+
+    let loaded = 0;
+    for (let i = 0; i < sources.length; i++)
+    {
+        let img = new Image();
+
+
+        img.onload = function ()
+        {
+            loaded++;
+            if (loaded == sources.length)
+            {
+                imagesLoaded();
+            }
+        };
+        img.src = sources[i];
+
+        images[ sources[i].replace("img/","")] = img;
+    }
+}
+
+function imagesLoaded()
+{
+    initGame();
+    draw();
+}
+
+
+loadImages();
